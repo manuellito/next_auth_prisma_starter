@@ -1,0 +1,9 @@
+services:
+  node:
+    image: node:22-alpine3.19
+    ports:
+    - 3000:3000
+    volumes:
+      - ./:/app
+    working_dir: '/app'
+    command:  tail -F anything
