@@ -16,6 +16,7 @@ import CardWrapper from "@/components/card-wrapper";
 import { LoginSchema } from "@/schemas/auth";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { FormError } from "../form-error";
 //import { login } from "@/actions/auth";
 
 const LoginForm = () => {
@@ -75,6 +76,7 @@ const LoginForm = () => {
                     
                   )}
               />       
+              <FormError message="toto" />
               <Button
                 type="submit"
                 className="w-full"
