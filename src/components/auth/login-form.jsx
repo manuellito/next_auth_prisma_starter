@@ -1,6 +1,7 @@
 "use client";
 import * as z from "zod";
-import { useForm } from "react-hook-form";
+import { useState, useTransition } from "react";
+import { set, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { 
@@ -17,9 +18,13 @@ import { LoginSchema } from "@/schemas/auth";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FormError } from "../form-error";
-//import { login } from "@/actions/auth";
+import { login } from "@/actions/auth";
+import { ButtonLoading } from "@/components/button-loading";
 
 const LoginForm = () => {
+  const [ error, setError ] = useState(null);
+  const [ isPending, startTransition] = useTransition();
+
   const form = useForm({
     resolver: zodResolver(LoginSchema),
     defaultValues: {  
@@ -29,8 +34,12 @@ const LoginForm = () => {
   });
 
   const onSubmit = (values) => {
-    console.log("fire")
-    login(values);
+    startTransition(() => {
+      login(values)
+      .then((data) =>{
+        setError(data.error);
+    });
+    });
   };
 
   return (
@@ -55,7 +64,12 @@ const LoginForm = () => {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="John.doe@gmail.com" type="email" />
+                        <Input 
+                          {...field} 
+                          placeholder="John.doe@gmail.com" 
+                          type="email" 
+                          disabmled={isPending}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -69,20 +83,29 @@ const LoginForm = () => {
                     <FormItem>
                       <FormLabel>Password</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="********" type="password" />
+                        <Input 
+                          {...field} 
+                          placeholder="********" 
+                          type="password" 
+                          disabled={isPending}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                     
                   )}
               />       
-              <FormError message="toto" />
-              <Button
+              <FormError message={error}/>
+              {isPending ? (
+                <ButtonLoading className="w-full"/>
+              ): (
+                <Button
                 type="submit"
                 className="w-full"
               >
                 Create an account
               </Button>         
+              )}
             </div>
           </div>
         </form>

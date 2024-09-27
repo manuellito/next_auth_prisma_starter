@@ -1,5 +1,6 @@
 "use client";
 import * as z from "zod";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -16,9 +17,15 @@ import CardWrapper from "@/components/card-wrapper";
 import { RegisterSchema } from "@/schemas/auth";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-//import { register } from "@/actions/auth";
+import { register } from "@/actions/auth";
+import { ButtonLoading } from "@/components/button-loading";
+import { FormError } from "../form-error";
 
 const RegisterForm = () => {
+  const [ isPending, startTransition] = useTransition();
+
+  const [ error, setError ] = useState(null);
+
   const form = useForm({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {  
@@ -32,11 +39,12 @@ const RegisterForm = () => {
   });
 
   const onSubmit = async (values) => {
-    console.log("values: ", values);
-    register(values)
-      .then((res) => {
-        console.log("res: ", res);
+    startTransition(() => {
+      register(values)
+      .then((data) =>{
+        setError(data.error);
       });
+    })
   };
 
   return (
@@ -136,12 +144,18 @@ const RegisterForm = () => {
               />                   
             </div>
           </div>
-          <Button
+          <FormError message={error}/>
+          {isPending ? (
+            <ButtonLoading className="w-full"/>
+          ):
+          (
+            <Button
             type="submit"
             className="w-full"
           >
             Create an account
           </Button>
+          )}
         </form>
       </Form>
     </CardWrapper>
