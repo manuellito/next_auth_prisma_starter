@@ -11,7 +11,11 @@ export const getUserByEmail = async (email) => {
 };
 
 export const getUserByUsername = async (username) => {
-  return await User.findOne({username});
+  return await db.user.findUnique({
+    where: {
+      username,
+    },
+  });
 };
 
 export const getUserById = async (id) => {
