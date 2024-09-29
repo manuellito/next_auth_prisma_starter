@@ -4,8 +4,8 @@ import { LoginSchema, RegisterSchema } from "@/schemas/auth";
 import bcrypt from "bcryptjs";
 
 import { db } from "@/lib/db";
-//import { signIn } from "@/lib/auth";
-//import { AuthError } from "next-auth";
+import { signIn } from "@/auth";
+import { AuthError } from "next-auth";
 import { getUserByEmail, getUserByUsername } from "@/lib/user";
 
 
