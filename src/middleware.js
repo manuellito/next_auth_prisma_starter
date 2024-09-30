@@ -24,6 +24,7 @@ export default auth((req) => {
 
   if(isAuthRoute){
     if(isLoggedin){
+      console.log("toto");
       return Response.redirect(new URL("/", nextUrl));
     }
     return null;
