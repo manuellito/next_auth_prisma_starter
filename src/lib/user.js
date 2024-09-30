@@ -46,6 +46,7 @@ export const currentRole = async () => {
   return session?.user?.role;
 };
 
+// Check if the current user is an admin for server actions
 export const isAdmin = async () => {
   const role = await currentRole();
 
