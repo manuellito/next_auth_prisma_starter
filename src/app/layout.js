@@ -1,3 +1,6 @@
+import { SessionProvider } from 'next-auth/react';
+import { auth } from '@/auth';
+
 import './globals.css'
 
 export const metadata = {
@@ -8,13 +11,14 @@ export const metadata = {
 export default async function RootLayout({
   children,
 }) {
-
+  const session = await auth();
   return (
+    <SessionProvider session={session}>
       <html lang="en">
         <body>
           {children}
         </body>
       </html>
-
+    </SessionProvider>
   )
 };
