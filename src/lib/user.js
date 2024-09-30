@@ -1,5 +1,7 @@
 "use server";
 
+import { UserRole } from "@prisma/client";
+
 import { db } from "@/lib/db";
 
 export const getUserByEmail = async (email) => {
@@ -43,3 +45,9 @@ export const currentRole = async () => {
 
   return session?.user?.role;
 };
+
+export const isAdmin = async () => {
+  const role = await currentRole();
+
+  return role === UserRole.ADMIN;
+}
