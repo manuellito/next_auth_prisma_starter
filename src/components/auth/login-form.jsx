@@ -37,7 +37,10 @@ const LoginForm = () => {
     startTransition(() => {
       login(values)
       .then((data) =>{
-        setError(data.error);
+        console.log("data:", data);
+        if(data.error){
+          setError(data.error);
+        }
     });
     });
   };
