@@ -77,3 +77,8 @@ export const login = async (values) => {
     throw error;
   }
 }
+
+export const loginMagicLink = async (formData) => {
+  console.log("formData", formData);
+  await signIn("resend", formData);
+}

@@ -22,18 +22,17 @@ model User {
   id            String          @id @default(cuid())
   name          String?
   email         String          @unique
-  username      String          @unique
+  username      String?          @unique
   firstname     String?
   lastname      String?
   title         String?
   address       String?
   phoneNumber   String?
-  role       UserRole        @default(USER)
-  isActive      Boolean         @default(false)
   emailVerified DateTime?
+  role       UserRole        @default(USER)
   image         String?
-  password      String?
   accounts      Account[]
+  sessions      Session[]
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -60,3 +59,20 @@ model Account {
   @@id([provider, providerAccountId])
 }
  
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+ 
+  @@id([identifier, token])
+}
